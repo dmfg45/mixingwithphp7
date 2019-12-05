@@ -2,9 +2,8 @@
 
 require_once "config.php";
 
-$sql = new Sql();
+$user = new User();
 
-$users = $sql->select("SELECT * FROM php7db.users;");
-//$sql->insert("INSERT INTO php7db.users(username, password) values ('Andre','123456789')");
+$user->loadById(1);
 
-echo json_encode($users);
+echo $user;
