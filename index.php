@@ -22,8 +22,12 @@ require_once "config.php";
 //$user->login("Andre","123456789");
 //echo $user;
 
-$aluno = new User("Aluno","server45");
+//$aluno = new User("Aluno","server45");
+//
+//$aluno->insert();
+//
+//echo $aluno;
 
-$aluno->insert();
-
-echo $aluno;
+$user = new User();
+$user->loadById(3);
+$user->update("Luis","server7Luis");

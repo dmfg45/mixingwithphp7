@@ -142,6 +142,17 @@ class User
 
     }
 
+    public function update($username, $password){
+        $this->setUsername($username);
+        $this->setPassword($password);
+        $sql = new Sql();
+        $sql->query("UPDATE php7db.users SET username = :USERNAME, password = :PASSWORD WHERE user_id = :ID", array(
+            'USERNAME' => $this->getUsername(),
+            'PASSWORD' => $this->getPassword(),
+            'ID' => $this->getUserId()
+        ));
+    }
+
     public function __construct($username = "", $password = "")
     {
         $this->setUsername($username);
