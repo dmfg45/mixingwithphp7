@@ -73,19 +73,79 @@ class User
         $this->userCreated = $userCreated;
     }
 
-    public function loadById($id){
+    public function loadById($id)
+    {
         $sql = new Sql();
         $result = $sql->select("SELECT * FROM php7db.users WHERE user_id = :ID", array(
-            ":ID"=>$id
+            ":ID" => $id
         ));
 
-        if (count($result) > 0){
-            $row = $result[0];
-            $this->setUserId($row['user_id']);
-            $this->setUsername($row['username']);
-            $this->setPassword($row['password']);
-            $this->setUserCreated(new DateTime($row['user_created_at']));
+        if (count($result) > 0) {
+
+            $this->setData($result[0]);
+
         }
+    }
+
+    public static function getList()
+    {
+        $sql = new Sql();
+        $list = $sql->select("SELECT * FROM php7db.users ORDER BY username");
+        return $list;
+    }
+
+    public static function searchUser($username)
+    {
+        $sql = new Sql();
+        $searchUsername = $sql->select("SELECT * FROM php7db.users WHERE username LIKE :SEARCH ORDER BY username", array(
+            ':SEARCH' => '%' . $username . '%'
+        ));
+
+        return $searchUsername;
+
+    }
+
+    public function login($username, $password)
+    {
+        $sql = new Sql();
+        $loginUsername = $sql->select("SELECT * FROM php7db.users WHERE username LIKE :USERNAME AND password LIKE :PASSWORD", array(
+            ':USERNAME' => $username,
+            ':PASSWORD' => $password
+        ));
+
+        if (count($loginUsername) > 0) {
+            $this->setData($loginUsername[0]);
+        } else {
+            throw  new Exception("Username or Password Invalid");
+        }
+    }
+
+    public function setData($data)
+    {
+        $this->setUserId($data['user_id']);
+        $this->setUsername($data['username']);
+        $this->setPassword($data['password']);
+        $this->setUserCreated(new DateTime($data['user_created_at']));
+    }
+
+    public function insert()
+    {
+        $sql = new Sql();
+        $results = $sql->select("CALL sp_users_insert(:USERNAME, :PASSWORD)", array(
+            'USERNAME' => $this->getUsername(),
+            'PASSWORD' => $this->getPassword()
+        ));
+
+        if (count($results) > 0) {
+            $this->setData($results[0]);
+        }
+
+    }
+
+    public function __construct($username = "", $password = "")
+    {
+        $this->setUsername($username);
+        $this->setPassword($password);
     }
 
     public function __toString()
@@ -97,6 +157,5 @@ class User
             'user_created_at' => $this->getUserCreated()->format("d-m-Y H:i:s")
         ));
     }
-
 
 }

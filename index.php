@@ -2,8 +2,28 @@
 
 require_once "config.php";
 
-$user = new User();
+//$user = new User();
+//
+//$user->loadById(1);
+//
+//echo $user
+//
+//;
+//
+//$userList = User::getList();
+//echo json_encode($userList);
 
-$user->loadById(1);
+//$expecificUsename = User::searchUser("Andre");
+//echo json_encode($expecificUsename);
 
-echo $user;
+//$user = new User();
+//
+//
+//$user->login("Andre","123456789");
+//echo $user;
+
+$aluno = new User("Aluno","server45");
+
+$aluno->insert();
+
+echo $aluno;

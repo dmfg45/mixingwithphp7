@@ -1,7 +1,8 @@
 <?php
-spl_autoload_register(function ($className){
-    $fileName = "classes".DIRECTORY_SEPARATOR.$className.".php";
-    if (file_exists($fileName)){
-        require_once ("$fileName");
+
+spl_autoload_register(function ($className) {
+    $fileName = "classes" . DIRECTORY_SEPARATOR . $className . ".php";
+    if (file_exists($fileName)) {
+        require_once("$fileName");
     }
 });
